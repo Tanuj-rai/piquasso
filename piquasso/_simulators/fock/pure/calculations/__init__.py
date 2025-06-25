@@ -434,6 +434,13 @@ def _add_occupation_number_basis(  # type: ignore
 
         occupation_numbers = new_occupation_numbers
 
+    cutoff = state.config.cutoff
+    if np.any(occupation_numbers >= cutoff):
+        raise ValueError(
+            f"Occupation numbers {occupation_numbers.tolist()} exceed the cutoff={cutoff}. "
+            "Please increase the cutoff or reduce the photon numbers in your state."
+        )
+
     index = get_index_in_fock_space(occupation_numbers)
 
     state.state_vector = state._connector.assign(state.state_vector, index, coefficient)
